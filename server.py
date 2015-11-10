@@ -52,7 +52,7 @@ def register():
 		flash('Name cannot contain numbers!')
 	elif request.form['confirmpass'] != request.form['password']:
 		flash('Passwords do not match!')
-	elif len(user) > 0:
+	if len(user) > 0:
 		session['user'] = user[0]
 		print session['user']
 		return render_template('success.html')
