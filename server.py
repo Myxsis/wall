@@ -5,7 +5,7 @@ import re
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9\.\+_-]+@[a-zA-Z0-9\._-]+\.[a-zA-Z]*$')
 app = Flask(__name__)
 app.secret_key='thebestsecretkeyhahaha'
-mysql = MySQLConnector('')
+mysql = MySQLConnector('loginandregister')
 
 def show(param):
 	if EMAIL_REGEX.match(param):
@@ -39,9 +39,9 @@ def login():
 @app.route('/register', methods=['POST'])
 def register():
 	current_user = show(request.form['email'])
-	user = create(request.form)
 	if len(current_user) > 0:
 		return redirect('/')
+	user = create(request.form)
 	if len(request.form['email']) < 1 or len(request.form['first_name']) < 1 or len(request.form['last_name']) < 1 or len(request.form['password']) < 1 or len(request.form['confirmpass']) < 1:
 		flash('Please fill out all fields!')
 	elif len(request.form['password']) < 8 or len(request.form['confirmpass']) < 8:
