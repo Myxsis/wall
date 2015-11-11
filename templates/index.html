@@ -5,7 +5,14 @@
 
 <body>
 	<h1>Register and Login</h1>
-	<form action='/register' method='post'>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <p>{{message}}</p>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  <form action='/register' method='post'>
 		<input type='text' name='first_name' placeholder='First Name'>
 		<input type='text' name='last_name' placeholder='Last Name'>
 		<input type='text' name='email' placeholder='Email'>
