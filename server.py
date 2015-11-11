@@ -33,7 +33,9 @@ def login():
 	current_user = show(request.form['email'])
 	if len(current_user) == 1 and bcrypt.hashpw(str(request.form['password']), current_user[0]['password_hash']) == current_user[0]['password_hash']:
 		session['user'] = current_user[0]
-		return render_template('success.html')
+		return render_template('wall.html')
+	query = "SELECT * FROM users JOIN messages ON users.id = messages.user_id"
+	mysql.run_mysql_query(query)
 	return ('/')
 
 @app.route('/register', methods=['POST'])
@@ -53,7 +55,23 @@ def register():
 	elif len(user) > 0:
 		session['user'] = user[0]
 		print session['user']
-		return render_template('success.html')
+		return render_template('wall.html')
 	# return redirect('/')
+
+@app.route('/postmessage', methods=['POST'])
+def newmsg():
+	message = request.form['newpost']
+	query = "INSERT INTO messages (user_id, message, created_at, updated_at) VALUES ('{}', '{}', NOW(), NOW())".format(session['user']['id'], request.form['newpost'])
+	# print 'WORK PLs'
+	mysql.run_mysql_query(query)
+	return render_template('wall.html')
+
+@app.route('/postcomment', methods=['POST'])
+def newcmt():
+	session['comment'] = request.form['newcmt']
+	query = "INSERT INTO comments (user_id, message_id, comment, created_at, updated_at) VALUES ('{}', '{}', '{}', NOW(), NOW())".format(session['user']['id'], message['id'], request.form['newcmt'])
+	query2 = "SELECT * FROM messages JOIN comments ON messages.id = comments.message_id"
+	mysql.run_mysql_query(query)
+	return render_template('wall.html')
 
 app.run(debug=True)

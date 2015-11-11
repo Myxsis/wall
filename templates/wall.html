@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<head>
+	<title>Your Wall</title>
+</head>
+
+<body>
+	<p>Hello, {{ session['user']['first_name'] }}.<br>
+		Successfully logged in.</p>
+
+	<form action='/postmessage' method='post'>
+		<textarea name='newpost'></textarea>
+		<input type='submit' value='Post Message'>
+	</form>
+
+	{% for message in messages %}
+		<p>{{ message['message'] }}</p>
+		{% if message['id'] == comment['message_id'] %}
+			{% for l in comment %}
+				<p>{{ session['comment'] }}</p>
+			{% endfor %}
+		{% endif %}
+		<form action='/postcomment' method='post'>
+			<textarea name='newcmt'></textarea>
+		<input type='submit' value='Post Comment'>
+	{% endfor %}
+</body>
+</html>
